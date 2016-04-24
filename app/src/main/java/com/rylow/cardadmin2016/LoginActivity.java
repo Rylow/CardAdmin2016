@@ -76,12 +76,12 @@ public class LoginActivity extends AppCompatActivity {
 
                                 if (connect.connect()){
 
-                                    /*Intent intent = new Intent(LoginActivity.this, RideInfoActivity.class);
+                                    Intent intent = new Intent(LoginActivity.this, MainWindowActivity.class);
 
                                     startActivity(intent);
-                                    finish();*/
+                                    finish();
 
-                                    Log.v("aaaa", "all good");
+
 
                                 }
                                 else {
