@@ -1,0 +1,6 @@
+<resources>
+    <string name="app_name">CardAdmin2016</string>
+    <string name="username">Username:</string>
+    <string name="password">Password:</string>
+    <string name="save_username_and_password">Save username and password</string>
+</resources>
