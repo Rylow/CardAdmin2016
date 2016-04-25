@@ -43,4 +43,15 @@
         android:layout_alignParentRight="true"
         android:layout_alignParentEnd="true"
         android:layout_marginRight="15dp" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceSmall"
+        android:text="On Temporary Card"
+        android:id="@+id/txtAttendanceItemTemporary"
+        android:layout_alignBottom="@+id/txtAttendanceItemArrivalTime"
+        android:layout_alignLeft="@+id/txtAttendanceItemName"
+        android:layout_alignStart="@+id/txtAttendanceItemName"
+        android:textColor="#016fff" />
 </RelativeLayout>

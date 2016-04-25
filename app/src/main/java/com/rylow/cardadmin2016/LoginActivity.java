@@ -75,14 +75,10 @@ public class LoginActivity extends AppCompatActivity {
                                 Connect connect = Connect.getInstance();
 
                                 if (connect.connect()){
-
                                     Intent intent = new Intent(LoginActivity.this, MainWindowActivity.class);
 
                                     startActivity(intent);
                                     finish();
-
-
-
                                 }
                                 else {
 

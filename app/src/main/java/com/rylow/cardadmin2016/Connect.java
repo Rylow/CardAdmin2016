@@ -62,7 +62,7 @@ public class Connect {
             inFromServer = new BufferedReader(new InputStreamReader(clientSocket.getInputStream()));
             outToServer = new BufferedWriter(new OutputStreamWriter(clientSocket.getOutputStream()));
 
-            json.put("code", TransmissionCodes.USER_LOGIN);
+            json.put("code", TransmissionCodes.MOBILE_LOGIN);
             json.put("username", username);
             json.put("password", password);
             json.put("clientid", 399);
@@ -77,14 +77,14 @@ public class Connect {
 
             json = new JSONObject(authreply);
 
-            if (json.getInt("code") == TransmissionCodes.USER_LOGIN_REPLY_SUCCESS) {
+            if (json.getInt("code") == TransmissionCodes.MOBILE_LOGIN_REPLY_SUCCESS) {
 
 
                 return true;
 
             }
             else{
-                if (json.getInt("code") == TransmissionCodes.USER_LOGIN_REPLY_FAIL) {
+                if (json.getInt("code") == TransmissionCodes.MOBILE_LOGIN_REPLY_FAIL) {
 
                     clientSocket.close();
 

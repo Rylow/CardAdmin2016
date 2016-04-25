@@ -9,6 +9,7 @@
         android:layout_height="wrap_content"
         android:gravity="center">
 
+
         <RadioButton
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -24,6 +25,8 @@
             android:checked="false"
             android:layout_marginLeft="15dp" />
 
+
+
         <ImageView
             android:layout_width="32dp"
             android:layout_height="32dp"
@@ -35,5 +38,5 @@
     <ListView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:id="@+id/listView3" />
+        android:id="@+id/listInSchoolReport" />
 </LinearLayout>
