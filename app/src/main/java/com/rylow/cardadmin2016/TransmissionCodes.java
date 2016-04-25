@@ -1,8 +1,6 @@
 package com.rylow.cardadmin2016;
 
-/**
- * Created by bakht on 24.04.2016.
- */
+
 public class TransmissionCodes {
 
     public static final int USER_LOGIN = 101;
