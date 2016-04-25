@@ -10,20 +10,28 @@
         android:gravity="center">
 
 
-        <RadioButton
+        <RadioGroup
+            android:id="@+id/radioType"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Sort By Entrance Time"
-            android:id="@+id/rbtnTime"
-            android:checked="true" />
+            android:orientation="horizontal"
+            android:layout_gravity="center_horizontal">
 
-        <RadioButton
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Sort By Name"
-            android:id="@+id/rbtnName"
-            android:checked="false"
-            android:layout_marginLeft="15dp" />
+            <RadioButton
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Sort By Entrance Time"
+                android:id="@+id/rbtnTime"
+                android:checked="true" />
+
+            <RadioButton
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Sort By Name"
+                android:id="@+id/rbtnName"
+                android:checked="false"
+                android:layout_marginLeft="15dp" />
+        </RadioGroup>
 
 
 

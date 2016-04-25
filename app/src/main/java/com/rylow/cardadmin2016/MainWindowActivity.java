@@ -1,7 +1,6 @@
 package com.rylow.cardadmin2016;
 
 import android.app.AlertDialog;
-import android.app.Dialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.AsyncTask;
@@ -9,7 +8,6 @@ import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.MotionEvent;
 import android.view.View;
-import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -21,8 +19,6 @@ import java.io.BufferedWriter;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
-import java.util.ArrayList;
-import java.util.List;
 import java.util.concurrent.ExecutionException;
 
 /**
@@ -103,6 +99,7 @@ public class MainWindowActivity extends AppCompatActivity {
     TextView txtMainCurrentlyInSchool, txtMainOpenDoors, txtMainMyAttendance, txtMainSecurityCameras, txtMainSchoolAttendance, txtMainServerSettings;
     UserRights userRights;
     String cardnumber;
+    int staffid;
 
 
     @Override
@@ -232,6 +229,33 @@ public class MainWindowActivity extends AppCompatActivity {
                 imgMainMyAttendance.setVisibility(View.GONE);
                 txtMainMyAttendance.setVisibility(View.GONE);
             }
+            else{
+
+                imgMainMyAttendance.setOnTouchListener(new View.OnTouchListener() {
+                    @Override
+                    public boolean onTouch(View arg0, MotionEvent arg1) {
+
+                        switch (arg1.getAction()) {
+                            case MotionEvent.ACTION_DOWN: {
+
+                                Intent intent = new Intent(MainWindowActivity.this, MyAttendanceActivity.class);
+
+                                intent.putExtra("staffid", staffid);
+                                intent.putExtra("returnto", 1);
+
+                                startActivity(intent);
+                                finish();
+
+                                break;
+                            }
+                        }
+
+                        return true;
+
+                    }
+                });
+
+            }
             if (!userRights.getSecuritycameras()) {
                 imgMainSecurityCameras.setVisibility(View.GONE);
                 txtMainSecurityCameras.setVisibility(View.GONE);
@@ -239,6 +263,30 @@ public class MainWindowActivity extends AppCompatActivity {
             if (!userRights.getSchoolattendance()) {
                 imgMainSchoolAttendance.setVisibility(View.GONE);
                 txtMainSchoolAttendance.setVisibility(View.GONE);
+            }
+            else {
+                imgMainSchoolAttendance.setOnTouchListener(new View.OnTouchListener() {
+                    @Override
+                    public boolean onTouch(View arg0, MotionEvent arg1) {
+
+                        switch (arg1.getAction()) {
+                            case MotionEvent.ACTION_DOWN: {
+
+                                Intent intent = new Intent(MainWindowActivity.this, AllStaffAttendanceActivity.class);
+
+                                startActivity(intent);
+                                finish();
+
+                                break;
+                            }
+                        }
+
+                        return true;
+
+                    }
+                });
+
+
             }
             if (!userRights.getServersettings()) {
                 imgMainServerSettings.setVisibility(View.GONE);
@@ -296,6 +344,7 @@ public class MainWindowActivity extends AppCompatActivity {
                 rightsToReturn.setSchoolattendance(recievedJSON.getBoolean("schoolattendance"));
                 rightsToReturn.setServersettings(recievedJSON.getBoolean("serversettings"));
                 cardnumber = recievedJSON.getString("cardnumber");
+                staffid = recievedJSON.getInt("id");
             }
 
             return rightsToReturn;

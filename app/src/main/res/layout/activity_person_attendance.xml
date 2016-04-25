@@ -72,7 +72,7 @@
     <ListView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:id="@+id/listView4"
+        android:id="@+id/listPersonAttendance"
         android:layout_below="@+id/txtPersonAttendanceReportFor"
         android:layout_centerHorizontal="true"
         android:layout_marginTop="10dp" />

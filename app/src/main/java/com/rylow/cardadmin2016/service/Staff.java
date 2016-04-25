@@ -1,12 +1,16 @@
 package com.rylow.cardadmin2016.service;
 
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.util.Base64;
+
+import java.util.Comparator;
 
 
 /**
  * Created by s.bakhti on 25.4.2016.
  */
-public class Staff {
+public class Staff implements Comparable<Staff> {
 
     private String name;
     private String email;
@@ -40,6 +44,38 @@ public class Staff {
         return Base64.decode(photo, Base64.URL_SAFE);
     }
 
+    public Bitmap getPicture (){
+
+        byte[] img = Base64.decode(photo, Base64.URL_SAFE);
+
+        return BitmapFactory.decodeByteArray(img, 0, img.length);
+
+    }
+
+
+
+    @Override
+    public int compareTo(Staff o) {
+        return this.name.compareTo(o.getName());
+    }
+
+
+    public static Comparator<Staff> CompareByArrivalTime
+            = new Comparator<Staff>() {
+
+        public int compare(Staff staff1, Staff staff2) {
+
+            Long staffTime1 = staff1.getTimein();
+            Long staffTime2 = staff2.getTimein();
+
+            //ascending order
+            return staffTime1.compareTo(staffTime2);
+
+            //descending order
+            //return fruitName2.compareTo(fruitName1);
+        }
+
+    };
 
 
     public String getName() {

@@ -9,9 +9,8 @@ import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.ListView;
-import android.widget.RadioButton;
-import android.widget.RadioGroup;
 
 import com.rylow.cardadmin2016.service.Staff;
 import com.rylow.cardadmin2016.service.StaffReportAdapter;
@@ -29,58 +28,30 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.concurrent.ExecutionException;
 
 /**
- * Created by s.bakhti on 25.4.2016.
+ * Created by bakht on 25.04.2016.
  */
-public class CurrentlyInSchoolActivity extends AppCompatActivity {
+public class AllStaffAttendanceActivity extends AppCompatActivity {
 
-    RadioGroup radioType;
+    ListView listAllStaff;
     ArrayList<Staff> listStaff;
-    ListView listInSchoolReport;
     StaffReportAdapter adapter;
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_currently_in_school);
+        setContentView(R.layout.activity_all_staff_attendance);
 
-        radioType = (RadioGroup) findViewById(R.id.radioType);
+        listAllStaff = (ListView) findViewById(R.id.listAllStaff);
 
-        listInSchoolReport = (ListView) findViewById(R.id.listInSchoolReport);
+        getAllStaff();
 
-        radioType.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener()
-        {
-            @Override
-            public void onCheckedChanged(RadioGroup group, int checkedId) {
-
-
-                switch (checkedId){
-
-                    case R.id.rbtnName :
-                        Collections.sort(listStaff);
-                        adapter.notifyDataSetChanged();
-                        break;
-                    case R.id.rbtnTime :
-                        Collections.sort(listStaff, Staff.CompareByArrivalTime);
-                        adapter.notifyDataSetChanged();
-                        break;
-
-                }
-
-
-
-            }
-        });
-
-        getStaffAttendanceReport();
 
     }
 
-    private void getStaffAttendanceReport() {
+    private void getAllStaff() {
 
         final JSONArray array = new JSONArray();
 
@@ -114,7 +85,7 @@ public class CurrentlyInSchoolActivity extends AppCompatActivity {
 
                     if (connect.connect()){
 
-                        return requestAttendanceReport(connect, array);
+                        return requestAllStaffList(connect, array);
 
                     }
                     else {
@@ -128,7 +99,7 @@ public class CurrentlyInSchoolActivity extends AppCompatActivity {
                 }
                 else{
 
-                    return requestAttendanceReport(connect, array);
+                    return requestAllStaffList(connect, array);
 
                 }
             }
@@ -142,10 +113,13 @@ public class CurrentlyInSchoolActivity extends AppCompatActivity {
             for (int i = 0; i < arrayStaff.length(); i++){
 
                 JSONObject json = arrayStaff.getJSONObject(i);
+                Log.v("aaaa", json.toString());
+
+
                 Staff staff = new Staff(json.getString("name"), json.getString("email"), json.getString("role"), json.getString("photo"), json.getString("photofilename"), json.getBoolean("external"),
                         json.getBoolean("active"), json.getInt("terminal"), json.getInt("id"), json.getInt("securitygroup"), json.getBoolean("ontemporarycard"), json.getLong("timein"));
 
-                if (staff.getPhoto().length() > 0){ //WE DONT HAVE A PICTURE
+                if (staff.getPhoto().length() > 1){ //WE DONT HAVE A PICTURE
                     File staffPicture = new File(mydir, staff.getPhotoFileName()); //Getting a file within the dir.
                     FileOutputStream out = new FileOutputStream(staffPicture);
                     out.write(staff.getPhotoAsByteArray());
@@ -159,14 +133,30 @@ public class CurrentlyInSchoolActivity extends AppCompatActivity {
 
             }
 
-            Collections.sort(listStaff, Staff.CompareByArrivalTime);
 
+            adapter = new StaffReportAdapter(AllStaffAttendanceActivity.this, listStaff);
 
-            adapter = new StaffReportAdapter(CurrentlyInSchoolActivity.this, listStaff);
-
-            listInSchoolReport.setAdapter(adapter);
+            listAllStaff.setAdapter(adapter);
 
             adapter.notifyDataSetChanged();
+
+            listAllStaff.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
+                @Override
+                public boolean onItemLongClick(AdapterView<?> parent, View view,
+                                               int position, long id) {
+
+                    final Staff value = (Staff) parent.getItemAtPosition(position);
+
+                    Intent intent = new Intent(AllStaffAttendanceActivity.this, MyAttendanceActivity.class);
+
+                    intent.putExtra("staffid", value.getId());
+                    intent.putExtra("returnto", 2);
+
+                    startActivity(intent);
+                    finish();
+                    return true;
+                }
+            });
 
 
         } catch (InterruptedException e) {
@@ -181,10 +171,9 @@ public class CurrentlyInSchoolActivity extends AppCompatActivity {
             e.printStackTrace();
         }
 
-
     }
 
-    private JSONArray requestAttendanceReport(Connect connect, JSONArray array) {
+    private JSONArray requestAllStaffList(Connect connect, JSONArray array) {
 
         JSONObject finalJSON = new JSONObject();
         try {
@@ -192,7 +181,7 @@ public class CurrentlyInSchoolActivity extends AppCompatActivity {
             BufferedWriter outToServer = new BufferedWriter(new OutputStreamWriter(connect.getClientSocket().getOutputStream()));
             BufferedReader inFromServer = new BufferedReader(new InputStreamReader(connect.getClientSocket().getInputStream()));
 
-            finalJSON.put("code", TransmissionCodes.REQUEST_STAFF_ATTENDANCE_LIST);
+            finalJSON.put("code", TransmissionCodes.REQUEST_ALL_STAFF_LIST);
             finalJSON.put("array", array);
 
             outToServer.write(finalJSON.toString());
@@ -213,9 +202,9 @@ public class CurrentlyInSchoolActivity extends AppCompatActivity {
 
             JSONObject recievedJSON = new JSONObject(incString);
 
-            if (recievedJSON.getInt("code") == TransmissionCodes.RESPONSE_STAFF_ATTENDANCE_LIST){
+            if (recievedJSON.getInt("code") == TransmissionCodes.RESPONSE_ALL_STAFF_LIST){
 
-               return recievedJSON.getJSONArray("array");
+                return recievedJSON.getJSONArray("array");
 
 
             }
@@ -229,6 +218,17 @@ public class CurrentlyInSchoolActivity extends AppCompatActivity {
 
         return new JSONArray();
 
+
+    }
+
+    @Override
+    public void onBackPressed() {
+
+        Intent intent = new Intent(AllStaffAttendanceActivity.this, MainWindowActivity.class);
+
+        startActivity(intent);
+        finish();
+
     }
 
     private void showErrorMessage(){
@@ -237,7 +237,7 @@ public class CurrentlyInSchoolActivity extends AppCompatActivity {
 
             @Override
             public void run() {
-                AlertDialog alertDialog = new AlertDialog.Builder(CurrentlyInSchoolActivity.this).create();
+                AlertDialog alertDialog = new AlertDialog.Builder(AllStaffAttendanceActivity.this).create();
                 alertDialog.setTitle("Failure");
                 alertDialog.setMessage("Connection to the server is not available. Probably mobile connection is not available at this moment. Please again later.");
                 alertDialog.setButton(AlertDialog.BUTTON_NEUTRAL, "OK",
@@ -251,16 +251,6 @@ public class CurrentlyInSchoolActivity extends AppCompatActivity {
         });
 
 
-
-    }
-
-    @Override
-    public void onBackPressed() {
-
-        Intent intent = new Intent(CurrentlyInSchoolActivity.this, MainWindowActivity.class);
-
-        startActivity(intent);
-        finish();
 
     }
 

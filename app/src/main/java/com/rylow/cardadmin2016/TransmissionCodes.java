@@ -13,5 +13,11 @@ public class TransmissionCodes {
     public static final int REQUEST_DOOR_OPEN = 808;
     public static final int REQUEST_STAFF_ATTENDANCE_LIST = 809;
     public static final int RESPONSE_STAFF_ATTENDANCE_LIST = 810;
-
+    public static final int REQUEST_PERSONAL_ATTENDANCE = 811;
+    public static final int RESPONSE_PERSONAL_ATTENDANCE = 812;
+    public static final int REQUEST_ALL_STAFF_LIST = 813;
+    public static final int RESPONSE_ALL_STAFF_LIST = 814;
+    public static final int REQUEST_PICTURES = 815;
+    public static final int RESPONSE_PICTURES = 816;
+    public static final int NO_MORE_PICTURES = 817;
 }
